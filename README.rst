@@ -8,7 +8,7 @@ brause.cc_
 ``box-shadow`` CSS attribute to attach a multitude of blocky shadows
 to the ``<div>`` container and animating its value.
 
-brause.cc/*_
+`brause.cc/*`_
 ------------
 
 Ersatz-Dropbox.  I really like the permalink feature of Dropbox_, so I
