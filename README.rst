@@ -17,7 +17,7 @@ use a `Ruby script`_.
 
 .. _brause.cc: http://brause.cc/
 .. _Animated CSS3 pixel art: https://github.com/wasamasa/brause.cc/blob/master/index.html
-.. _brause.cc*_: http://brause.cc/dealwithit.jpg
+.. _brause.cc/*_: http://brause.cc/dealwithit.jpg
 .. _Dropbox: https://www.dropbox.com/
 .. _rsync script: https://github.com/wasamasa/dotfiles/blob/master/home/wasa/bin/fallkiste
 .. _Ruby script: https://github.com/wasamasa/dotfiles/blob/master/home/wasa/bin/permalink
