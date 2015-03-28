@@ -1,5 +1,6 @@
 (use spiffy
-     spiffy-uri-match)
+     spiffy-uri-match
+     (only posix set-buffering-mode!))
 
 (define quotes
   ;; taken and adapted from http://www.lokaltermin.eu/stoll-zitate
@@ -530,6 +531,7 @@
                           (send-response body: (random-quotes))))))))))
   (server-bind-address "127.0.0.1")
   (server-port 8000)
+  (set-buffering-mode! (current-output-port) #:line)
   (access-log (current-output-port))
   (start-server))
 
