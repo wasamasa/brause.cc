@@ -1,13 +1,13 @@
-objects = stoll.o quotes.o
+OBJS = stoll.o quotes.o
 
-stoll: $(objects)
-	csc -o $@ $(objects)
+stoll: $(OBJS)
+	csc -o $@ $(OBJS)
 
 %.o: %.scm
 	csc -c -o $@ $<
 
 clean:
-	rm -f $(objects)
+	rm -f $(OBJS)
 
 squeaky: clean
 	rm -f stoll
