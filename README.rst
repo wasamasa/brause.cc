@@ -28,6 +28,6 @@ CHICKEN_ for fun.
 .. _rsync script: https://github.com/wasamasa/dotfiles/blob/master/home/wasa/bin/fallkiste
 .. _Ruby script: https://github.com/wasamasa/dotfiles/blob/master/home/wasa/bin/permalink
 .. _braune.brause.cc: http://braune.brause.cc/
-.. _Random quotes: https://github.com/wasamasa/brause.cc/blob/master/stoll.scm
+.. _Random quotes: https://github.com/wasamasa/brause.cc/blob/master/stoll/stoll.scm
 .. _Axel Stoll: https://en.wikipedia.org/wiki/Axel_Stoll
 .. _CHICKEN: http://call-cc.org/
