@@ -1,10 +1,8 @@
-(use spiffy
-     spiffy-uri-match
-     (only posix set-buffering-mode!))
+(declare (unit quotes))
 
 (define quotes
   ;; taken and adapted from http://www.lokaltermin.eu/stoll-zitate
-  '("Licht ist keine Grenzgeschwindigkeit, Vorsicht. Skalarwellen und stehende Welle hat ein Vielfaches mehr!"
+  #("Licht ist keine Grenzgeschwindigkeit, Vorsicht. Skalarwellen und stehende Welle hat ein Vielfaches mehr!"
     "Auf die Maßeinheiten der Kernphysik hab ich bewusst verzichtet, denn außer mir würde das kaum jemand begreifen."
     "Das ist ein ganz einfacher Algorithmus."
     "Primzahlen bis 1024 werden in der Computertechnik benutzt."
@@ -504,35 +502,3 @@
     "3 mal Storgram reinen Alkohol!"
     "Das schirmt gegen radioaktive Strahlung ab."
     "Irrtum! Gezielte Desinformation!"))
-
-(define (random-quotes)
-  (format "~A\n"
-          (string-intersperse
-           (sample (if (= (random 2) 0) 2 3)
-                   quotes))))
-
-(define (sample size population)
-  (let ((population-size (length population)))
-    ;; take a sample by adding yet untaken picks to the result
-    (let loop ((result '())
-               (result-size 0))
-      (if (< result-size size)
-          (let ((pick (list-ref population (random population-size))))
-            (if (not (member pick result))
-                (loop (cons pick result) (add1 result-size))
-                (loop result result-size)))
-          result))))
-
-(define (main)
-  (vhost-map
-   `((".*" . ,(uri-match/spiffy
-               `(((/ "")
-                  (GET ,(lambda (c)
-                          (send-response body: (random-quotes))))))))))
-  (server-bind-address "127.0.0.1")
-  (server-port 8000)
-  (set-buffering-mode! (current-output-port) #:line)
-  (access-log (current-output-port))
-  (start-server))
-
-(main)
