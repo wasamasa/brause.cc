@@ -1,13 +1,15 @@
-stoll: stoll.o quotes.o
-	csc -o stoll stoll.o quotes.o
+objects = stoll.o quotes.o
 
-stoll.o: stoll.scm
-	csc -c stoll.scm
+stoll: $(objects)
+	csc -o $@ $(objects)
 
-quotes.o: quotes.scm
-	csc -c quotes.scm
+%.o: %.scm
+	csc -c -o $@ $<
 
 clean:
-	rm -f stoll.o quotes.o stoll
+	rm -f $(objects)
+
+squeaky: clean
+	rm -f stoll
 
 .PHONY: all clean
