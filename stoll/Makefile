@@ -1,15 +1,16 @@
 OBJS = stoll.o quotes.o
-
-stoll: $(OBJS)
-	csc -o $@ $(OBJS)
+SCM = csc
+COMPILE.scm = $(SCM) -c
 
 %.o: %.scm
-	csc -c -o $@ $<
+	$(COMPILE.scm) $(OUTPUT_OPTION) $<
+
+all: stoll
+
+stoll: $(OBJS)
+	$(SCM) $(OUTPUT_OPTION) $(OBJS)
 
 clean:
-	rm -f $(OBJS)
-
-squeaky: clean
-	rm -f stoll
+	$(RM) $(OBJS) stoll
 
 .PHONY: all clean
