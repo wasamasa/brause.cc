@@ -1,8 +1,8 @@
-(declare (uses quotes))
-
 (use spiffy
      spiffy-uri-match
      (only posix set-buffering-mode!))
+
+(include "quotes.scm")
 
 (define (random-quotes)
   (format "~A\n"

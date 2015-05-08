@@ -1,5 +1,3 @@
-(declare (unit quotes))
-
 (define quotes
   ;; taken and adapted from http://www.lokaltermin.eu/stoll-zitate
   #("Licht ist keine Grenzgeschwindigkeit, Vorsicht. Skalarwellen und stehende Welle hat ein Vielfaches mehr!"
