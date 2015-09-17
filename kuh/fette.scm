@@ -50,7 +50,7 @@
      entries: (map (match-lambda
                     ((id date description url permalink)
                      (make-entry
-                      id: (number->string date)
+                      id: permalink
                       title: (make-title (unix->date date))
                       updated: (unix->datetime date)
                       links: (list (make-link uri: permalink))
