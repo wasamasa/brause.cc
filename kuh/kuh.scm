@@ -48,7 +48,7 @@
                                                                WHERE date = ?;")
                               date)))
     (if (not latest)
-        (exec (sql db "INSERT INTO burgers(date, description, url,permalink)
+        (exec (sql db "INSERT INTO burgers(date, description, url, permalink)
                               VALUES(?, ?, ?, ?);")
               date description url permalink))))
 
