@@ -159,7 +159,7 @@
      (lambda (archive)
        (insert-packages! db archive)
        (let* ((packages (latest-packages db archive atom-limit))
-              (file (format "~a.xml" archive))
+              (file (format "~a/~a.xml" (cadr (argv)) archive))
               (feed (atom-feed db archive file packages)))
          (with-output-to-file file
            (lambda () (display feed)))))
