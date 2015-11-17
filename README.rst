@@ -21,6 +21,18 @@ braune.brause.cc_
 `Random quotes`_ by `Axel Stoll`_.  Built without (micro-)frameworks in
 CHICKEN_ for fun.
 
+fette.brause.cc_
+----------------
+
+Dynamically generated atom feed for `a certain burger restaurant`_.
+Consists of `a binary scraping contents`_ and `a binary serving them`_.
+
+elpa.brause.cc_
+---------------
+
+`Statically generated atom feeds`_ for new `ELPA packages`_.  Highly
+useful to keep track of new Emacs packages to brag about!
+
 .. _brause.cc: http://brause.cc/
 .. _Animated CSS3 pixel art: https://github.com/wasamasa/brause.cc/blob/master/index.html
 .. _Ersatz-Dropbox: http://brause.cc/dealwithit.jpg
@@ -31,3 +43,10 @@ CHICKEN_ for fun.
 .. _Random quotes: https://github.com/wasamasa/brause.cc/blob/master/stoll/stoll.scm
 .. _Axel Stoll: https://en.wikipedia.org/wiki/Axel_Stoll
 .. _CHICKEN: http://call-cc.org/
+.. _fette.brause.cc: http://fette.brause.cc/
+.. _a certain burger restaurant: http://fettekuh.de/
+.. _a binary scraping contents: https://github.com/wasamasa/brause.cc/blob/master/kuh/kuh.scm
+.. _a binary serving them: https://github.com/wasamasa/brause.cc/blob/master/kuh/fette.scm
+.. _elpa.brause.cc: http://elpa.brause.cc/
+.. _Statically generated atom feeds: https://github.com/wasamasa/brause.cc/blob/master/elpa/elpa.scm
+.. _ELPA packages: https://github.com/wasamasa/brause.cc/blob/master/elpa/elpa.scm
