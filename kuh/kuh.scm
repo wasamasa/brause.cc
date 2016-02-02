@@ -1,35 +1,47 @@
 (use (only http-client with-input-from-request)
-     (only html-parser html->sxml)
-     (only uri-common uri-reference uri-path uri->string update-uri)
-     (only sxpath sxpath)
+     (only uri-common uri-encode-string)
      (only matchable match-let*)
      (only sql-de-lite open-database fetch-value fetch-all
-           sql schema exec query))
+           sql schema exec query)
+     (only medea json-parsers json->string read-json)
+     (only srfi-1 find))
 
-(define (fetch-fragment)
-  (let* ((base-url "https://www.facebook.com/DiefetteKuh")
-         (document (with-input-from-request base-url #f html->sxml))
-         ;; NOTE: For yet unknown reasons Facebook keeps the
-         ;; interesting data in a comment, that comment can be found
-         ;; by picking the first containing "BURGER"
-         (comment-string ((sxpath "string(//comment()[contains(.,'BURGER')])")
-                          document))
-         (comment (call-with-input-string comment-string html->sxml)))
-    ;; Pick the first burger post
-    (car ((sxpath "//div[contains(@class,'userContentWrapper') and contains(string(),'BURGER')]")
-          comment))))
+(define array-as-list-parser
+  (cons 'array (lambda (x) x)))
 
-(define (burger-metadata fragment)
-  (let* ((timestamp ((sxpath "number(//abbr/@data-utime)") fragment))
-         (description ((sxpath "string(//div[contains(@class,'userContent')]/p)")
-                       fragment))
-         (image ((sxpath "string(//div[contains(@class,'uiScaledImageContainer')]/img/@src)")
-                 fragment))
-         (base-url "https://www.facebook.com")
-         (relative-permalink ((sxpath "string(//a/abbr/../@href)") fragment))
-         (path (uri-path (uri-reference relative-permalink)))
-         (permalink (uri->string (update-uri (uri-reference base-url)
-                                             path: path))))
+(json-parsers (cons array-as-list-parser (json-parsers)))
+
+(define fql-api-base-url "https://graph.facebook.com/fql")
+
+(define (page-albums)
+  (let* ((params '((page_id . "SELECT page_id FROM page WHERE username = 'Diefettekuh'")
+                   (albums . "SELECT aid, name FROM album WHERE owner IN (SELECT page_id FROM #page_id)")))
+         (json (json->string params))
+         (url (format "~a?q=~a" fql-api-base-url (uri-encode-string json)))
+         (response (with-input-from-request url #f read-json)))
+    (cadr (alist-ref 'data response))))
+
+(define (timeline-album-id data)
+  (let* ((needle "Timeline Photos")
+         (haystack (alist-ref 'fql_result_set data))
+         (match (find (lambda (item) (equal? (alist-ref 'name item) needle)) haystack)))
+    (alist-ref 'aid match)))
+
+(define (album-photos album-id)
+  (let* ((query (format "SELECT created, caption, link, images FROM photo WHERE aid = '~a' LIMIT 10" album-id))
+         (params `((photos . ,query)))
+         (json (json->string params))
+         (url (format "~a?q=~a" fql-api-base-url (uri-encode-string json)))
+         (response (with-input-from-request url #f read-json)))
+    (alist-ref 'fql_result_set (car (alist-ref 'data response)))))
+
+(define (burger-metadata data)
+  (let* ((needle "BURGER DER WOCHE")
+         (match (find (lambda (item) (substring=? (alist-ref 'caption item) needle)) data))
+         (timestamp (alist-ref 'created match))
+         (description (alist-ref 'caption match))
+         (image (alist-ref 'source (car (alist-ref 'images match))))
+         (permalink (alist-ref 'link match)))
     (list timestamp description image permalink)))
 
 (define db (open-database "db.sqlite3"))
@@ -54,6 +66,6 @@
 
 (define (main)
   (init-database)
-  (update-database (burger-metadata (fetch-fragment))))
+  (update-database (burger-metadata (album-photos (timeline-album-id (page-albums))))))
 
 (main)
