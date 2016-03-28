@@ -11,6 +11,11 @@
 
 (json-parsers (cons array-as-list-parser (json-parsers)))
 
+;; TODO: create an app (with my fake account), save an app token,
+;; change code to use graph API
+;; - http://minimaxir.com/2015/07/facebook-scraper/
+;; - https://developers.facebook.com/docs/facebook-login/access-tokens
+
 (define fql-api-base-url "https://graph.facebook.com/fql")
 
 (define (page-albums)
