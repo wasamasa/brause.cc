@@ -159,9 +159,9 @@
      (lambda (archive)
        (insert-packages! db archive)
        (let* ((packages (latest-packages db archive atom-limit))
-              (file (format "~a/~a.xml" (cadr (argv)) archive))
+              (file (format "~a.xml" archive))
               (feed (atom-feed db archive file packages)))
-         (with-output-to-file file
+         (with-output-to-file (format "~a/~a" (cadr (argv)) file)
            (lambda () (display feed)))))
      (map car elpa-meta-data))))
 
