@@ -27,6 +27,13 @@ fette.brause.cc_
 Dynamically generated atom feed for `a certain burger restaurant`_.
 Consists of `a binary scraping contents`_ and `a binary serving them`_.
 
+brot.brause.cc_
+---------------
+
+Atom feed for breadfaceblog_.  Surprisingly enough, dissecting
+Instagram_ websites only involves a JSON parser after finding the blob
+they're generated from.
+
 elpa.brause.cc_
 ---------------
 
@@ -47,6 +54,9 @@ useful to keep track of new Emacs packages to brag about!
 .. _a certain burger restaurant: http://fettekuh.de/
 .. _a binary scraping contents: https://github.com/wasamasa/brause.cc/blob/master/kuh/kuh.scm
 .. _a binary serving them: https://github.com/wasamasa/brause.cc/blob/master/kuh/fette.scm
+.. _brot.brause.cc: http://brot.brause.cc/
+.. _breadfaceblog: https://www.instagram.com/breadfaceblog/
+.. _Instagram: https://www.instagram.com/
 .. _elpa.brause.cc: http://elpa.brause.cc/
 .. _Statically generated atom feeds: https://github.com/wasamasa/brause.cc/blob/master/elpa/elpa.scm
 .. _ELPA packages: https://github.com/wasamasa/brause.cc/blob/master/elpa/elpa.scm
