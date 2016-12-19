@@ -11,42 +11,47 @@
 
 (json-parsers (cons array-as-list-parser (json-parsers)))
 
-;; TODO: create an app (with my fake account), save an app token,
-;; change code to use graph API
-;; - http://minimaxir.com/2015/07/facebook-scraper/
-;; - https://developers.facebook.com/docs/facebook-login/access-tokens
+(define (access-token filename)
+  (let* ((credentials (with-input-from-file filename read))
+         (app-id (alist-ref 'app-id credentials))
+         (app-secret (alist-ref 'app-secret credentials)))
+    (assert (and app-id app-secret) "App ID or secret not provided")
+    (format "~a|~a" app-id app-secret)))
 
-(define fql-api-base-url "https://graph.facebook.com/fql")
+(define graph-api-base-url "https://graph.facebook.com/v2.8")
 
-(define (page-albums)
-  (let* ((params '((page_id . "SELECT page_id FROM page WHERE username = 'Diefettekuh'")
-                   (albums . "SELECT aid, name FROM album WHERE owner IN (SELECT page_id FROM #page_id)")))
-         (json (json->string params))
-         (url (format "~a?q=~a" fql-api-base-url (uri-encode-string json)))
-         (response (with-input-from-request url #f read-json)))
-    (cadr (alist-ref 'data response))))
+(define (graph-api-request path options token)
+  (let* ((params (cons (cons 'access_token token) options))
+         (query (form-urlencode params separator: "&"))
+         (url (format "~a/~a?~a" graph-api-base-url path query)))
+    (with-input-from-request url #f read-json)))
 
-(define (timeline-album-id data)
-  (let* ((needle "Timeline Photos")
-         (haystack (alist-ref 'fql_result_set data))
-         (match (find (lambda (item) (equal? (alist-ref 'name item) needle)) haystack)))
-    (alist-ref 'aid match)))
+(define (timeline-album-id token)
+  (->> token
+       (graph-api-request "DiefetteKuh/albums" '())
+       (alist-ref 'data)
+       (find (lambda (album)
+               (equal? (alist-ref 'name album)
+                       "Timeline Photos")))
+       (alist-ref 'id)))
 
-(define (album-photos album-id)
-  (let* ((query (format "SELECT created, caption, link, images FROM photo WHERE aid = '~a' LIMIT 10" album-id))
-         (params `((photos . ,query)))
-         (json (json->string params))
-         (url (format "~a?q=~a" fql-api-base-url (uri-encode-string json)))
-         (response (with-input-from-request url #f read-json)))
-    (alist-ref 'fql_result_set (car (alist-ref 'data response)))))
+(define (burger-photo-id album-id token)
+  (->> token
+       (graph-api-request (string-append album-id "/photos") '())
+       (alist-ref 'data)
+       (find (lambda (photo)
+               (substring=? (alist-ref 'name photo)
+                            "BURGER DER WOCHE")))
+       (alist-ref 'id)))
 
-(define (burger-metadata data)
-  (let* ((needle "BURGER DER WOCHE")
-         (match (find (lambda (item) (substring=? (alist-ref 'caption item) needle)) data))
-         (timestamp (alist-ref 'created match))
-         (description (alist-ref 'caption match))
-         (image (alist-ref 'source (car (alist-ref 'images match))))
-         (permalink (alist-ref 'link match)))
+(define (burger-metadata photo-id token)
+  (let* ((fields "created_time,name,images,link")
+         (params `((fields . ,fields) (date_format . "U")))
+         (data (graph-api-request photo-id params token))
+         (timestamp (alist-ref 'created_time data))
+         (description (alist-ref 'name data))
+         (image (alist-ref 'source (car (alist-ref 'images data))))
+         (permalink (alist-ref 'link data)))
     (list timestamp description image permalink)))
 
 (define db (open-database "db.sqlite3"))
@@ -71,6 +76,10 @@
 
 (define (main)
   (init-database)
-  (update-database (burger-metadata (album-photos (timeline-album-id (page-albums))))))
+  (let ((token (access-token "credentials.alist")))
+    (-> (timeline-album-id token)
+        (burger-photo-id token)
+        (burger-metadata token)
+        (update-database))))
 
 (main)
