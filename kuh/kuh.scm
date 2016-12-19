@@ -1,10 +1,12 @@
 (use (only http-client with-input-from-request)
-     (only uri-common uri-encode-string)
+     (only uri-common form-urlencode)
      (only matchable match-let*)
-     (only sql-de-lite open-database fetch-value fetch-all
+     (only sql-de-lite open-database fetch-value
            sql schema exec query)
-     (only medea json-parsers json->string read-json)
-     (only srfi-1 find))
+     (only medea json-parsers read-json)
+     (only data-structures alist-ref)
+     (only srfi-1 find)
+     clojurian-syntax)
 
 (define array-as-list-parser
   (cons 'array (lambda (x) x)))
