@@ -25,7 +25,7 @@
   (vhost-map `((".*" . ,handle-request)))
   (root-path "static/")
   (server-bind-address "127.0.0.1")
-  (server-port 8000)
+  (server-port 8002)
   (set-buffering-mode! (current-output-port) #:line)
   (access-log (current-output-port))
   (start-server))
