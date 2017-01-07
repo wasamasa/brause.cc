@@ -2,8 +2,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-h1 {
+h1, h2 {
   padding: 1em;
-  font-size: 72px;
   text-align: center;
+}
+
+h1 {
+  font-size: 72px;
 }
