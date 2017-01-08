@@ -1,3 +1,5 @@
+'use strict';
+
 window.onload = function() {
     var apiUrl = 'https://api.koeln.ccc.de/';
     var xhr = new XMLHttpRequest();
