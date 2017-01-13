@@ -1,5 +1,10 @@
 (use (only http-client with-input-from-request)
      (only medea read-json)
+     (only data-structures alist-ref o)
+     (only ports with-output-to-string)
+     (only sxml-transforms SRV:send-reply pre-post-order
+           universal-conversion-rules)
+     (only doctype doctype-rules)
      (only posix set-buffering-mode!)
      (only intarweb request-method request-uri)
      (only uri-common uri-path)
@@ -7,9 +12,63 @@
 
 (define api-url "https://api.koeln.ccc.de/")
 
-(define (open?)
-  (let ((response (with-input-from-request api-url #f read-json)))
-    (alist-ref 'open (alist-ref 'state response))))
+(define (c4-state)
+  (let* ((response (with-input-from-request api-url #f read-json))
+         (state (alist-ref 'state response)))
+    (list (alist-ref 'open state) (alist-ref 'lastchange state))))
+
+(define (approximate-duration timestamp)
+  (let* ((->int (o inexact->exact round))
+         (minute 60)
+         (hour (* 60 minute))
+         (day (* 24 hour))
+         (month (* 30 day))
+         (year (* 365 day))
+         (delta (- (current-seconds) timestamp))
+         (duration
+          (cond
+           ((>= delta (* 2 year))
+            (format "~a Jahren" (->int (/ delta year))))
+           ((>= delta year)
+            "einem Jahr")
+           ((>= delta (* 2 month))
+            (format "~a Monaten" (->int (/ delta month))))
+           ((>= delta month)
+            "einem Monat")
+           ((>= delta (* 2 day))
+            (format "~a Tagen" (->int (/ delta day))))
+           ((>= delta day)
+            "einem Tag")
+           ((>= delta (* 2 hour))
+            (format "~a Stunden" (->int (/ delta hour))))
+           ((>= delta hour)
+            "einer Stunde")
+           ((>= delta (* 2 minute))
+            (format "~a Minuten" (->int (/ delta minute))))
+           ((>= delta minute)
+            "einer Minute")
+           (else
+            (format "~a Sekunden" delta)))))
+    (string-append "Seit etwa " duration)))
+
+(define (status-page open? timestamp)
+  (with-output-to-string
+    (lambda ()
+      (SRV:send-reply
+       (pre-post-order
+        `((doctype-html)
+          (html (@ (lang "de"))
+                (head
+                 (meta (@ (charset "utf-8")))
+                 (title "Hat der C4 offen?")
+                 (link (@ (href "style.css")
+                          (rel "stylesheet")
+                          (type "text/css"))))
+                (body
+                 (h1 ,(if open? "Ja" "Nein"))
+                 ,(when open?
+                    `(h2 ,(approximate-duration timestamp))))))
+        (append doctype-rules universal-conversion-rules))))))
 
 (define (handle-request continue)
   (let* ((request (current-request))
@@ -17,11 +76,8 @@
          (path (uri-path (request-uri request))))
     (if (and (eq? method 'GET) (equal? path '(/ "")))
         (with-headers '((cache-control "no-cache"))
-          (lambda ()
-            (if (open?)
-                (send-static-file "ja.html")
-                (send-static-file "nein.html"))))
-      (continue))))
+          (lambda () (send-response body: (apply status-page (c4-state)))))
+        (continue))))
 
 (define (main)
   (vhost-map `((".*" . ,handle-request)))
