@@ -66,8 +66,9 @@
                           (type "text/css"))))
                 (body
                  (h1 ,(if open? "Ja" "Nein"))
-                 ,(when open?
-                    `(h2 ,(approximate-duration timestamp))))))
+                 ,(if open?
+                      `(h2 ,(approximate-duration timestamp))
+                      #f))))
         (append doctype-rules universal-conversion-rules))))))
 
 (define (handle-request continue)
