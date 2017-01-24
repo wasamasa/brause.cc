@@ -1,6 +1,6 @@
 (use http-client html-parser sxpath medea
      irregex data-structures clojurian-syntax
-     sql-de-lite rfc3339 sxml-serializer matchable atom)
+     sql-de-lite rfc3339 matchable atom)
 
 (define base-url "https://www.instagram.com/breadfaceblog/")
 
@@ -95,7 +95,7 @@
   (rfc3339->string (seconds->rfc3339 seconds)))
 
 (define (atom-feed db file posts)
-  (serialize-sxml
+  (write-atom-doc
    (make-atom-doc
     (make-feed
      title: (make-title "breadfaceblog")
@@ -119,9 +119,8 @@
         (file atom-file))
     (init-database db)
     (insert-posts! db (posts (fetch-json)))
-    (let* ((posts (latest-posts db atom-limit))
-           (feed (atom-feed db file posts)))
+    (let ((posts (latest-posts db atom-limit)))
       (with-output-to-file (format "~a/~a" (cadr (argv)) file)
-        (lambda () (display feed))))))
+        (lambda () (atom-feed db file posts))))))
 
 (main)

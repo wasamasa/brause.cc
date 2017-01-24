@@ -3,7 +3,7 @@
      (only sql-de-lite open-database with-transaction
            schema exec sql query fetch-column fetch-value fetch-all)
      (only rfc3339 seconds->rfc3339 rfc3339->string)
-     (only atom make-atom-doc make-feed make-title
+     (only atom write-atom-doc make-atom-doc make-feed make-title
            make-author make-link make-entry make-content)
      sxml-serializer)
 
@@ -129,7 +129,7 @@
      "Keywords: " ,keywords (br))))
 
 (define (atom-feed db archive file packages)
-  (serialize-sxml
+  (write-atom-doc
    (make-atom-doc
     (make-feed
      title: (make-title (format "~a Packages" (archive-title archive)))
@@ -159,10 +159,9 @@
      (lambda (archive)
        (insert-packages! db archive)
        (let* ((packages (latest-packages db archive atom-limit))
-              (file (format "~a.xml" archive))
-              (feed (atom-feed db archive file packages)))
+              (file (format "~a.xml" archive)))
          (with-output-to-file (format "~a/~a" (cadr (argv)) file)
-           (lambda () (display feed)))))
+           (lambda () (atom-feed db archive file packages)))))
      (map car elpa-meta-data))))
 
 (main)

@@ -1,10 +1,11 @@
 (use (only sql-de-lite open-database query sql fetch-all fetch-value)
      (only matchable match-lambda)
-     (only atom make-atom-doc make-feed make-title
+     (only atom write-atom-doc make-atom-doc make-feed make-title
            make-author make-link make-entry make-content)
      (only rfc3339 seconds->rfc3339 rfc3339->string
            rfc3339-day rfc3339-month rfc3339-year)
      (only posix set-buffering-mode!)
+     (only ports with-output-to-string)
      format
      sxml-serializer
      spiffy spiffy-uri-match)
@@ -39,7 +40,7 @@
      (p ,description))))
 
 (define (feed)
-  (serialize-sxml
+  (write-atom-doc
    (make-atom-doc
     (make-feed
      title: (make-title "Fette Brause")
@@ -65,7 +66,7 @@
         `(((/ "")
            (GET ,(lambda (c)
                    (send-response
-                    body: (feed)
+                    body: (with-output-to-string feed)
                     headers: '((content-type "application/xml")))))))))))
   (server-bind-address "127.0.0.1")
   (server-port 8001)
