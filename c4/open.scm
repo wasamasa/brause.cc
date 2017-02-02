@@ -48,7 +48,7 @@
            ((>= delta minute)
             "einer Minute")
            (else
-            (format "~a Sekunden" delta)))))
+            (format "~a Sekunden" (->int delta))))))
     (string-append "Seit etwa " duration)))
 
 (define (status-page open? timestamp)
