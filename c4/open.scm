@@ -81,6 +81,7 @@
         (continue))))
 
 (define (main)
+  (trusted-proxies '("127.0.0.1"))
   (vhost-map `((".*" . ,handle-request)))
   (root-path "static/")
   (server-bind-address "127.0.0.1")

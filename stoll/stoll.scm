@@ -23,6 +23,7 @@
           result))))
 
 (define (main)
+  (trusted-proxies '("127.0.0.1"))
   (vhost-map
    `((".*" . ,(uri-match/spiffy
                `(((/ "")
