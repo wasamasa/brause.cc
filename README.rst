@@ -40,6 +40,13 @@ elpa.brause.cc_
 `Statically generated atom feeds`_ for new `ELPA packages`_.  Highly
 useful to keep track of new Emacs packages to brag about!
 
+c4.brause.cc_
+-------------
+
+Status page for the CCCC_ hackerspace, based on `their official API`_.
+If you find this information useful, use the API instead of scraping
+my page or you'll get blocked.
+
 .. _brause.cc: http://brause.cc/
 .. _Animated CSS3 pixel art: https://github.com/wasamasa/brause.cc/blob/master/index.html
 .. _Ersatz-Dropbox: http://brause.cc/dealwithit.jpg
@@ -60,3 +67,6 @@ useful to keep track of new Emacs packages to brag about!
 .. _elpa.brause.cc: http://elpa.brause.cc/
 .. _Statically generated atom feeds: https://github.com/wasamasa/brause.cc/blob/master/elpa/elpa.scm
 .. _ELPA packages: https://github.com/wasamasa/brause.cc/blob/master/elpa/elpa.scm
+.. _c4.brause.cc: http://c4.brause.cc/
+.. _CCCC: https://koeln.ccc.de/
+.. _their official API: https://api.koeln.ccc.de/
