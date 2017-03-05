@@ -17,14 +17,13 @@
          (state (alist-ref 'state response)))
     (list (alist-ref 'open state) (alist-ref 'lastchange state))))
 
-(define (approximate-duration timestamp)
-  (let* ((->int (o inexact->exact round))
+(define (approximate-duration delta)
+  (let* ((->int (o inexact->exact floor))
          (minute 60)
          (hour (* 60 minute))
          (day (* 24 hour))
          (month (* 30 day))
          (year (* 365 day))
-         (delta (- (current-seconds) timestamp))
          (duration
           (cond
            ((>= delta (* 2 year))
@@ -47,7 +46,9 @@
             (format "~a Minuten" (->int (/ delta minute))))
            ((>= delta minute)
             "einer Minute")
-           (else
+           ((= delta 1)
+            "einer Sekunde")
+           (else ; zero and more than one second are plural forms
             (format "~a Sekunden" (->int delta))))))
     (string-append "Seit etwa " duration)))
 
@@ -67,7 +68,8 @@
                 (body
                  (h1 ,(if open? "Ja" "Nein"))
                  ,(if open?
-                      `(h2 ,(approximate-duration timestamp))
+                      `(h2 ,(approximate-duration (- (current-seconds)
+                                                     timestamp)))
                       #f))))
         (append doctype-rules universal-conversion-rules))))))
 
