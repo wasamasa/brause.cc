@@ -42,8 +42,7 @@
        (graph-api-request (string-append album-id "/photos") '())
        (alist-ref 'data)
        (find (lambda (photo)
-               (substring=? (alist-ref 'name photo)
-                            "BURGER DER WOCHE")))
+               (substring-index "BURGER DER WOCHE" (alist-ref 'name photo))))
        (alist-ref 'id)))
 
 (define (burger-metadata photo-id token)
