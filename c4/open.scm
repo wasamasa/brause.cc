@@ -65,7 +65,11 @@
                           (content ,(string-append "initial-scale=1.0,"
                                                    "width=device-width,"
                                                    "user-scalable=no"))))
+                 (meta (@ (name "apple-mobile-web-app-capable")
+                          (content "yes")))
                  (title "Hat der C4 offen?")
+                 (link (@ (href "touch-icon-iphone.png")
+                          (rel "apple-touch-icon")))
                  (link (@ (href "style.css")
                           (rel "stylesheet")
                           (type "text/css"))))
