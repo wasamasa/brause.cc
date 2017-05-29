@@ -8,14 +8,21 @@
      (only posix set-buffering-mode!)
      (only intarweb request-method request-uri)
      (only uri-common uri-path)
+     (only tcp tcp-connect-timeout)
+     (only openssl ssl-handshake-timeout)
      spiffy)
 
 (define api-url "https://api.koeln.ccc.de/")
 
 (define (c4-state)
-  (let* ((response (with-input-from-request api-url #f read-json))
-         (state (alist-ref 'state response)))
-    (list (alist-ref 'open state) (alist-ref 'lastchange state))))
+  (let ((response (condition-case
+                   (with-input-from-request api-url #f read-json)
+                   ((exn http) #f)
+                   ((exn i/o net) #f))))
+    (if response
+        (let ((state (alist-ref 'state response)))
+          (list #t (alist-ref 'open state) (alist-ref 'lastchange state)))
+        (list #f #f #f))))
 
 (define (approximate-duration delta)
   (let* ((->int (o inexact->exact floor))
@@ -52,7 +59,7 @@
             (format "~a Sekunden" (->int delta))))))
     (string-append "Seit etwa " duration)))
 
-(define (status-page open? timestamp)
+(define (status-page reachable? open? timestamp)
   (with-output-to-string
     (lambda ()
       (SRV:send-reply
@@ -77,7 +84,10 @@
                           (rel "stylesheet")
                           (type "text/css"))))
                 (body
-                 (h1 ,(if open? "Ja" "Nein"))
+                 (h1 ,(cond
+                       ((not reachable?) "¯\\_(ツ)_/¯")
+                       (open? "Ja")
+                       (else "Nein")))
                  ,(if open?
                       `(h2 ,(approximate-duration (- (current-seconds)
                                                      timestamp)))
@@ -94,6 +104,8 @@
         (continue))))
 
 (define (main)
+  (tcp-connect-timeout 1000)
+  (ssl-handshake-timeout 1000)
   (trusted-proxies '("127.0.0.1"))
   (vhost-map `((".*" . ,handle-request)))
   (root-path "static/")
