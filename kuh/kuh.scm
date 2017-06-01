@@ -4,8 +4,8 @@
      (only sql-de-lite open-database fetch-value
            sql schema exec query)
      (only medea json-parsers read-json)
-     (only data-structures alist-ref)
-     (only srfi-1 find)
+     (only data-structures alist-ref sort)
+     (only srfi-1 find filter)
      clojurian-syntax)
 
 (define array-as-list-parser
@@ -47,13 +47,26 @@
                  (substring-index "BURGER DER WOCHE" name))))
        (alist-ref 'id)))
 
+(define (image-size image)
+  (* (alist-ref 'height image)
+     (alist-ref 'width image)))
+
+(define (image-greater? a b)
+  (> (image-size a) (image-size b)))
+
+(define (pick-image images)
+  (let ((max-size (* 600 800))
+        (sorted (sort images image-greater?)))
+    (car (filter (lambda (image) (< (image-size image) max-size)) sorted))))
+
 (define (burger-metadata photo-id token)
   (let* ((fields "created_time,name,images,link")
          (params `((fields . ,fields) (date_format . "U")))
          (data (graph-api-request photo-id params token))
          (timestamp (alist-ref 'created_time data))
          (description (alist-ref 'name data))
-         (image (alist-ref 'source (car (alist-ref 'images data))))
+         (image (pick-image (alist-ref 'images data)))
+         (image-link (alist-ref 'source image))
          (permalink (alist-ref 'link data)))
     (list timestamp description image permalink)))
 
