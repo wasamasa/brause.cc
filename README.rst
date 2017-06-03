@@ -1,6 +1,8 @@
 The lab
 =======
 
+Most of the demos listed below are written in `CHICKEN Scheme`_.
+
 brause.cc_
 ----------
 
@@ -18,8 +20,7 @@ use a `Ruby script`_.
 braune.brause.cc_
 -----------------
 
-`Random quotes`_ by `Axel Stoll`_.  Built without (micro-)frameworks in
-CHICKEN_ for fun.
+`Random quotes`_ by `Axel Stoll`_.
 
 fette.brause.cc_
 ----------------
@@ -47,6 +48,7 @@ Status page for the CCCC_ hackerspace, based on `their official API`_.
 If you find this information useful, use the API instead of scraping
 my page or you'll get blocked.
 
+.. _CHICKEN Scheme: http://call-cc.org/
 .. _brause.cc: http://brause.cc/
 .. _Animated CSS3 pixel art: https://github.com/wasamasa/brause.cc/blob/master/index.html
 .. _Ersatz-Dropbox: http://brause.cc/dealwithit.jpg
@@ -56,7 +58,6 @@ my page or you'll get blocked.
 .. _braune.brause.cc: http://braune.brause.cc/
 .. _Random quotes: https://github.com/wasamasa/brause.cc/blob/master/stoll/stoll.scm
 .. _Axel Stoll: https://en.wikipedia.org/wiki/Axel_Stoll
-.. _CHICKEN: http://call-cc.org/
 .. _fette.brause.cc: http://fette.brause.cc/
 .. _a certain burger restaurant: http://fettekuh.de/
 .. _a binary scraping contents: https://github.com/wasamasa/brause.cc/blob/master/kuh/kuh.scm
