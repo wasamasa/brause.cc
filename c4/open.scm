@@ -91,7 +91,13 @@
                  ,(if open?
                       `(h2 ,(approximate-duration (- (current-seconds)
                                                      timestamp)))
-                      #f))))
+                      #f)
+                 (footer
+                  (a (@ (href "#")
+                        (onclick "window.location.reload()"))
+                     "Neuladen")
+                  " | "
+                  (a (@ (href ,api-url)) "API")))))
         (append doctype-rules universal-conversion-rules))))))
 
 (define (handle-request continue)
