@@ -68,7 +68,7 @@
          (image (pick-image (alist-ref 'images data)))
          (image-link (alist-ref 'source image))
          (permalink (alist-ref 'link data)))
-    (list timestamp description image permalink)))
+    (list timestamp description image-link permalink)))
 
 (define db (open-database "db.sqlite3"))
 
