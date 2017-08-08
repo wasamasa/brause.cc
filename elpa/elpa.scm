@@ -1,4 +1,5 @@
-(use (only http-client with-input-from-request)
+(use (only data-structures substring-index)
+     (only http-client with-input-from-request)
      (only matchable match match-let match-let* match-lambda)
      (only sql-de-lite open-database with-transaction
            schema exec sql query fetch-column fetch-value fetch-all)
@@ -47,17 +48,27 @@
   (let ((meta-data (alist-ref archive elpa-meta-data)))
     (alist-ref 'title meta-data)))
 
-;; FIXME this will bite me once negative numbers for version parts
-;; come into use...
-(define (concat seq sep)
-  (string-intersperse (map ->string seq) sep))
+(define (string-prefix? prefix string)
+  (let ((index (substring-index prefix string)))
+    (and index (zero? index))))
+
+(define (fixup-url url)
+  (if (or (string-prefix? "http://" url)
+          (string-prefix? "https://" url))
+      url
+      (string-append "http://" url)))
 
 (define (archive-item->list archive-item)
+  ;; FIXME this will bite me once negative numbers for version parts
+  ;; come into use...
+  (define (concat seq sep)
+    (string-intersperse (map ->string seq) sep))
   (match-let* (((name version _ desc _ . rest) archive-item)
                (meta-data (match rest
                             (((_ . _)) (car rest))
                             (else '())))
                (url (alist-ref ':url meta-data))
+               (url (and url (fixup-url url)))
                (keywords (alist-ref ':keywords meta-data)))
     (list (symbol->string name) (concat version ".") desc url
           (and keywords (not (null? keywords))
