@@ -65,6 +65,7 @@
    `((".*" .
       ,(uri-match/spiffy
         `(((/ "")
+           (HEAD ,(lambda (c) (send-response code: 200)))
            (GET ,(lambda (c)
                    (send-response
                     body: (with-output-to-string feed)
