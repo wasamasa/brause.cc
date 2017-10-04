@@ -28,23 +28,13 @@
          (url (format "~a/~a?~a" graph-api-base-url path query)))
     (with-input-from-request url #f read-json)))
 
-(define (timeline-album-id token)
+(define (burger-photo-id token)
   (->> token
-       (graph-api-request "DiefetteKuh/albums" '())
+       (graph-api-request "DiefetteKuh/photos" '((type . uploaded)))
        (alist-ref 'data)
-       (find (lambda (album)
-               (equal? (alist-ref 'name album)
-                       "Timeline Photos")))
-       (alist-ref 'id)))
-
-(define (burger-photo-id album-id token)
-  (->> token
-       (graph-api-request (string-append album-id "/photos") '())
-       (alist-ref 'data)
-       (filter (lambda (photo) (alist-ref 'name photo)))
        (find (lambda (photo)
                (let ((name (alist-ref 'name photo)))
-                 (substring-index "BURGER DER WOCHE" name))))
+                 (and name (substring-index "BURGER DER WOCHE" name)))))
        (alist-ref 'id)))
 
 (define (image-size image)
@@ -93,8 +83,7 @@
 (define (main)
   (init-database)
   (let ((token (access-token "credentials.alist")))
-    (-> (timeline-album-id token)
-        (burger-photo-id token)
+    (-> (burger-photo-id token)
         (burger-metadata token)
         (update-database))))
 
