@@ -20,7 +20,7 @@
     (assert (and app-id app-secret) "App ID or secret not provided")
     (format "~a|~a" app-id app-secret)))
 
-(define graph-api-base-url "https://graph.facebook.com/v2.8")
+(define graph-api-base-url "https://graph.facebook.com/v2.10")
 
 (define (graph-api-request path options token)
   (let* ((params (cons (cons 'access_token token) options))
