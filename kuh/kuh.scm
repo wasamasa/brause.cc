@@ -34,7 +34,7 @@
        (alist-ref 'data)
        (find (lambda (photo)
                (let ((name (alist-ref 'name photo)))
-                 (and name (substring-index "BURGER DER WOCHE" name)))))
+                 (and name (substring-index-ci "BURGER DER WOCHE" name)))))
        (alist-ref 'id)))
 
 (define (image-size image)
