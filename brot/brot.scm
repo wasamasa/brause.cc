@@ -129,7 +129,7 @@
     (init-database db)
     (insert-posts! db (posts (fetch-json)))
     (let ((posts (latest-posts db atom-limit)))
-      (with-output-to-file (format "~a/~a" (cadr (argv)) file)
+      (with-output-to-file (format "~a/~a" (car (command-line-arguments)) file)
         (lambda () (atom-feed db file posts))))))
 
 (main)
