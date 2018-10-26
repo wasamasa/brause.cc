@@ -163,16 +163,25 @@
 
 (define atom-limit 10)
 
-(define (main)
-  (let ((db (open-database "db.sqlite3")))
-    (init-database db)
-    (for-each
-     (lambda (archive)
-       (insert-packages! db archive)
-       (let* ((packages (latest-packages db archive atom-limit))
-              (file (format "~a.xml" archive)))
-         (with-output-to-file (format "~a/~a" (cadr (argv)) file)
-           (lambda () (atom-feed db archive file packages)))))
-     (map car elpa-meta-data))))
+(define (die message #!rest args)
+  (apply fprintf (current-error-port) message args)
+  (exit 1))
 
-(main)
+(define (main archive outdir)
+  (let ((archive (string->symbol archive))
+        (db (open-database "db.sqlite3")))
+    (init-database db)
+    (when (not (alist-ref archive elpa-meta-data))
+      (die "unknown archive: ~a\n" archive))
+    (when (alist-ref 'disable-verification? (alist-ref archive elpa-meta-data))
+      (ssl-verify? #f))
+    (insert-packages! db archive)
+    (let* ((packages (latest-packages db archive atom-limit))
+           (file (format "~a.xml" archive)))
+      (with-output-to-file (format "~a/~a" outdir file)
+        (lambda () (atom-feed db archive file packages))))))
+
+(when (not (= (length (command-line-arguments)) 2))
+  (die "usage: ~a <archive-name> <outdir>\n" (program-name)))
+
+(apply main (command-line-arguments))
