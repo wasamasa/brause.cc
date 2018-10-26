@@ -1,5 +1,8 @@
 (use (only data-structures substring-index)
-     (only http-client with-input-from-request)
+     (only http-client with-input-from-request server-connector)
+     (only uri-common uri-scheme uri-host uri-port)
+     (only tcp tcp-connect)
+     (only openssl ssl-connect*)
      (only matchable match match-let match-let* match-lambda)
      (only sql-de-lite open-database with-transaction
            schema exec sql query fetch-column fetch-value fetch-all)
@@ -7,6 +10,25 @@
      (only atom write-atom-doc make-atom-doc make-feed make-title
            make-author make-link make-entry make-content)
      sxml-serializer)
+
+(define ssl-verify? (make-parameter #t))
+
+;; adapted from http-client.scm
+(define (http-server-connector uri proxy)
+  (let ((remote-end (or proxy uri)))
+    (case (uri-scheme remote-end)
+      ((#f http) (tcp-connect (uri-host remote-end) (uri-port remote-end)))
+      ((https) (receive (in out)
+                   (ssl-connect* hostname: (uri-host remote-end)
+                                 port: (uri-port remote-end)
+                                 sni-name: #t
+                                 verify?: (ssl-verify?))
+                 (if (and in out)       ; Ugly, but necessary
+                     (values in out)
+                     (error "You forgot installing the openssl egg."))))
+      (else (error "This shouldn't happen")))))
+
+(server-connector http-server-connector)
 
 (define elpa-meta-data
   '((gnu
@@ -18,7 +40,9 @@
      (title . "Marmalade")
      (archive-contents . "http://marmalade-repo.org/packages/archive-contents")
      (permalink . "https://marmalade-repo.org/packages/~a")
-     (home-page . "https://marmalade-repo.org/"))
+     (home-page . "https://marmalade-repo.org/")
+     ;; expired certificate
+     (disable-verification? . #t))
     (melpa
      (title . "MELPA")
      (archive-contents . "https://melpa.org/packages/archive-contents")
