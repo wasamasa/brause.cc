@@ -46,7 +46,7 @@
 
 (define (insert-metadata! db-path path aid)
   (define statement
-    "INSERT OR IGNORE INTO episodes(aid, title, airdate, epno, epid)
+    "INSERT OR REPLACE INTO episodes(aid, title, airdate, epno, epid)
      VALUES(?, ?, ?, ?, ?);")
   (match-let (((title . rows) (response->metadata path)))
     (call-with-database db-path
