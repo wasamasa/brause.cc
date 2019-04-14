@@ -1,6 +1,19 @@
-(use http-client html-parser sxpath medea
-     irregex data-structures clojurian-syntax
-     sql-de-lite rfc3339 matchable atom)
+(import scheme)
+(import (chicken base))
+(import (srfi 1))
+(import (chicken format))
+(import (chicken irregex))
+(import (chicken process-context))
+(import (chicken string))
+(import atom)
+(import (clojurian syntax))
+(import html-parser)
+(import http-client)
+(import matchable)
+(import medea)
+(import rfc3339)
+(import sql-de-lite)
+(import sxpath)
 
 (define base-url "https://www.instagram.com/breadfaceblog/")
 

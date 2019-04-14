@@ -1,0 +1,8 @@
+((synopsis "Status page for the CCCC hackerspace")
+ (author "Vasilij Schneidermann")
+ (license "Unlicense")
+ (category web)
+ (dependencies doctype http-client intarweb medea openssl
+               spiffy sxml-transforms uri-common)
+ (component-options (csc-options "-m" "page"))
+ (components (program open)))

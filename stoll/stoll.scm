@@ -1,13 +1,18 @@
-(use spiffy
-     spiffy-uri-match
-     (only posix set-buffering-mode!))
+(import scheme)
+(import (chicken base))
+(import (chicken format))
+(import (chicken port))
+(import (chicken random))
+(import (chicken string))
+(import spiffy)
+(import spiffy-uri-match)
 
 (include "quotes.scm")
 
 (define (random-quotes)
   (format "~A\n"
           (string-intersperse
-           (sample (if (= (random 2) 0) 2 3)
+           (sample (if (= (pseudo-random-integer 2) 0) 2 3)
                    quotes))))
 
 (define (sample size population)
@@ -16,7 +21,8 @@
     (let loop ((result '())
                (result-size 0))
       (if (< result-size size)
-          (let ((pick (vector-ref population (random population-size))))
+          (let ((pick (vector-ref population
+                                  (pseudo-random-integer population-size))))
             (if (not (member pick result))
                 (loop (cons pick result) (add1 result-size))
                 (loop result result-size)))

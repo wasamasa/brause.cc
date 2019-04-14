@@ -1,0 +1,8 @@
+((synopsis "ELPA Atom feeds for tracking new Emacs packages")
+ (author "Vasilij Schneidermann")
+ (license "Unlicense")
+ (category web)
+ (dependencies srfi-1 atom http-client matchable openssl rfc3339
+               sql-de-lite sxml-serializer uri-common)
+ (component-options (csc-options "-m" "page"))
+ (components (program elpa)))

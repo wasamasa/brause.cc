@@ -1,0 +1,7 @@
+((synopsis "Random Axel Stoll quotes")
+ (author "Vasilij Schneidermann")
+ (license "Unlicense")
+ (category web)
+ (dependencies spiffy spiffy-uri-match)
+ (component-options (csc-options "-m" "page"))
+ (components (program stoll)))

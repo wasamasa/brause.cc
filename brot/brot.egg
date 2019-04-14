@@ -1,0 +1,8 @@
+((synopsis "Atom feed for breadfaceblog")
+ (author "Vasilij Schneidermann")
+ (license "Unlicense")
+ (category web)
+ (dependencies srfi-1 atom clojurian html-parser http-client
+               matchable medea rfc3339 sql-de-lite sxpath)
+ (component-options (csc-options "-m" "page"))
+ (components (program brot)))

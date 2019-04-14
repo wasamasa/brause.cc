@@ -1,0 +1,10 @@
+((synopsis "Weekly offers of a certain burger restaurant")
+ (author "Vasilij Schneidermann")
+ (license "Unlicense")
+ (category web)
+ (dependencies srfi-1 atom clojurian format matchable medea
+               http-client rfc3339 spiffy spiffy-uri-match
+               sql-de-lite sxml-serializer uri-common)
+ (component-options (csc-options "-m" "page"))
+ (components (program fette)
+             (program kuh)))

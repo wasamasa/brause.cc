@@ -1,14 +1,14 @@
-(use (only sql-de-lite open-database query sql fetch-all fetch-value)
-     (only matchable match-lambda)
-     (only atom write-atom-doc make-atom-doc make-feed make-title
-           make-author make-link make-entry make-content)
-     (only rfc3339 seconds->rfc3339 rfc3339->string
-           rfc3339-day rfc3339-month rfc3339-year)
-     (only posix set-buffering-mode!)
-     (only ports with-output-to-string)
-     format
-     sxml-serializer
-     spiffy spiffy-uri-match)
+(import scheme)
+(import (chicken base))
+(import (chicken port))
+(import atom)
+(import format)
+(import matchable)
+(import rfc3339)
+(import spiffy)
+(import spiffy-uri-match)
+(import sql-de-lite)
+(import sxml-serializer)
 
 (define db (open-database "db.sqlite3"))
 
