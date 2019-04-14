@@ -210,6 +210,8 @@
         (lambda () (atom-feed db archive file packages))))))
 
 (when (not (= (length (command-line-arguments)) 2))
-  (die "usage: ~a <archive-name> <outdir>\n" (program-name)))
+  (die "usage: ~a <archive-name> <outdir>\narchives: ~s\n"
+       (program-name)
+       (map car elpa-meta-data)))
 
 (apply main (command-line-arguments))
