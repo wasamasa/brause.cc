@@ -25,17 +25,19 @@
 (define (fetch-json)
   (let* ((document (with-input-from-request base-url #f html->sxml))
          ;; <script type="text/javascript">window._sharedData = ...</script>
-         (query "string(//script[contains(string(),'window._sharedData')])")
+         (query "string(//script[contains(string(),'window._sharedData =')])")
          (js ((sxpath query) document))
          ;; window._sharedData = {...};
          (json-text (substring js 21 (sub1 (string-length js)))))
     (read-json json-text)))
 
 (define (description->title description)
-  ;; we don't need no stinkin' emoji
-  (let* ((re (irregex '(: (+ (~ print)))))
-         (title (car (irregex-split re description))))
-    (string-chomp title " ")))
+  (if (zero? (string-length description))
+      "untitled breadfaceblog post"
+      ;; we don't need no stinkin' emoji
+      (let* ((re (irregex '(: (+ (~ print)))))
+             (title (car (irregex-split re description))))
+        (string-chomp title " "))))
 
 (define (posts json)
   (let ((entries (->> json
