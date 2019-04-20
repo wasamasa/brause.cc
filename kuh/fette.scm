@@ -3,12 +3,13 @@
 (import (chicken port))
 (import atom)
 (import format)
+(import intarweb)
 (import matchable)
 (import rfc3339)
 (import spiffy)
-(import spiffy-uri-match)
 (import sql-de-lite)
 (import sxml-serializer)
+(import uri-common)
 
 (define db (open-database "db.sqlite3"))
 
@@ -59,17 +60,24 @@
                                              type: 'html))))
                    (fetch-latest))))))
 
+(define (handle-request continue)
+  (let* ((request (current-request))
+         (method (request-method request))
+         (path (uri-path (request-uri request))))
+    (if (equal? path '(/ ""))
+        (cond
+         ((eq? method 'HEAD)
+          (send-response code: 200))
+         ((eq? method 'GET)
+          (send-response body: (with-output-to-string feed)
+                         headers: '((content-type "application/xml"))))
+         (else
+          (continue)))
+        (continue))))
+
 (define (main)
   (trusted-proxies '("127.0.0.1"))
-  (vhost-map
-   `((".*" .
-      ,(uri-match/spiffy
-        `(((/ "")
-           (HEAD ,(lambda (c) (send-response code: 200)))
-           (GET ,(lambda (c)
-                   (send-response
-                    body: (with-output-to-string feed)
-                    headers: '((content-type "application/xml")))))))))))
+  (vhost-map `((".*" . ,handle-request)))
   (server-bind-address "127.0.0.1")
   (server-port 8001)
   (set-buffering-mode! (current-output-port) #:line)

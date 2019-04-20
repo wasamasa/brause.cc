@@ -4,8 +4,9 @@
 (import (chicken port))
 (import (chicken random))
 (import (chicken string))
+(import intarweb)
 (import spiffy)
-(import spiffy-uri-match)
+(import uri-common)
 
 (include "quotes.scm")
 
@@ -28,13 +29,17 @@
                 (loop result result-size)))
           result))))
 
+(define (handle-request continue)
+  (let* ((request (current-request))
+         (method (request-method request))
+         (path (uri-path (request-uri request))))
+    (if (and (eq? method 'GET) (equal? path '(/ "")))
+        (send-response body: (random-quotes))
+        (continue))))
+
 (define (main)
   (trusted-proxies '("127.0.0.1"))
-  (vhost-map
-   `((".*" . ,(uri-match/spiffy
-               `(((/ "")
-                  (GET ,(lambda (c)
-                          (send-response body: (random-quotes))))))))))
+  (vhost-map `((".*" . ,handle-request)))
   (server-bind-address "127.0.0.1")
   (server-port 8000)
   (set-buffering-mode! (current-output-port) #:line)

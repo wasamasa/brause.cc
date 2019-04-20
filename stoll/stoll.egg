@@ -2,6 +2,6 @@
  (author "Vasilij Schneidermann")
  (license "Unlicense")
  (category web)
- (dependencies spiffy spiffy-uri-match)
+ (dependencies spiffy)
  (component-options (csc-options "-m" "page"))
  (components (program stoll)))

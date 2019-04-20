@@ -2,8 +2,8 @@
  (author "Vasilij Schneidermann")
  (license "Unlicense")
  (category web)
- (dependencies srfi-1 atom clojurian format matchable medea
-               http-client rfc3339 spiffy spiffy-uri-match
+ (dependencies srfi-1 atom clojurian format matchable
+               medea http-client rfc3339 spiffy
                sql-de-lite sxml-serializer uri-common)
  (component-options (csc-options "-m" "page"))
  (components (program fette)
