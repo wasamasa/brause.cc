@@ -23,8 +23,9 @@
                    ((exn i/o net) #f))))
     (if response
         (let ((state (alist-ref 'state response)))
-          (list #t (alist-ref 'open state) (alist-ref 'lastchange state)))
-        (list #f #f #f))))
+          (cons #t (map (lambda (key) (alist-ref key state))
+                        '(open lastchange message))))
+        (list #f #f #f #f))))
 
 (define (approximate-duration delta)
   (let* ((->int (o inexact->exact floor))
@@ -61,7 +62,7 @@
             (format "~a Sekunden" (->int delta))))))
     (string-append "Seit etwa " duration)))
 
-(define (status-page reachable? open? timestamp)
+(define (status-page reachable? open? timestamp message)
   (with-output-to-string
     (lambda ()
       (SRV:send-reply
@@ -90,6 +91,7 @@
                        ((not reachable?) "¯\\_(ツ)_/¯")
                        (open? "Ja")
                        (else "Nein")))
+                 ,(if message `(h2 ,message) #f)
                  ,(if open?
                       `(h2 ,(approximate-duration (- (current-seconds)
                                                      timestamp)))
