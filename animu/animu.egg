@@ -2,7 +2,7 @@
  (author "Vasilij Schneidermann")
  (license "Unlicense")
  (category web)
- (dependencies srfi-1 srfi-18 atom http-client matchable rfc3339 sendfile
-               sql-de-lite ssax sxpath z3)
+ (dependencies srfi-1 srfi-18 atom http-client intarweb matchable rfc3339
+               sql-de-lite ssax sxpath uri-common)
  (component-options (csc-options "-m" "page"))
  (components (program animu)))
