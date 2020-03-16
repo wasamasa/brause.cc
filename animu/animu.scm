@@ -26,7 +26,7 @@
 
 (define str string-append)
 (define (sqlite-bool x) (if x 1 0))
-(define (sqlite-unbool x) (if (= x 1) #t #f))
+(define (sqlite-unbool x) (if (and x (= x 1)) #t #f))
 
 (define (latest-data-for-anime db aid #!optional gid)
   (let ((q (str "SELECT eprange, completed FROM releases"
@@ -77,7 +77,7 @@
 (define (check-for-group-release! db xml aid gid)
   (let* ((latest-data (latest-data-for-anime db aid gid))
          (old-eprange (alist-ref 'eprange latest-data))
-         (completed? (alist-ref 'completed latest-data)))
+         (completed? (sqlite-unbool (alist-ref 'completed latest-data))))
     (when (not completed?)
       (let* ((atitle ((sxpath "string(//title[@type='main'])") xml))
              (epcount ((sxpath "number(//anime/neps)") xml))
@@ -109,7 +109,7 @@
 (define (check-for-any-release! db xml aid)
   (let* ((latest-data (latest-data-for-anime db aid))
          (old-eprange (alist-ref 'eprange latest-data))
-         (completed? (alist-ref 'completed latest-data)))
+         (completed? (sqlite-unbool (alist-ref 'completed latest-data))))
     (when (not completed?)
       (let* ((atitle ((sxpath "string(//title[@type='main'])") xml))
              (epcount ((sxpath "number(//anime/neps)") xml))
