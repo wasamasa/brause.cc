@@ -64,8 +64,6 @@
                (description . ,description))))
          entries)))
 
-(define database "db.sqlite3")
-
 (define (init-database db)
   (if (null? (schema db))
       (exec (sql db "CREATE TABLE posts(id INTEGER PRIMARY KEY,
@@ -112,20 +110,20 @@
                   LIMIT ?")
          limit))
 
-(define atom-file "atom.xml")
 (define atom-limit 15)
 
 (define (unix->datetime seconds)
   (rfc3339->string (seconds->rfc3339 seconds)))
 
-(define (atom-feed db file posts)
+(define (atom-feed db posts)
   (write-atom-doc
    (make-atom-doc
     (make-feed
      title: (make-title "breadfaceblog")
-     id: (format "http://brot.brause.cc/~a" file)
+     id: (format "http://brot.brause.cc/atom.xml")
      updated: (unix->datetime (updated-at db))
-     authors: (list (make-author name: "Bread Face" email: "breadfaceblog@gmail.com"))
+     authors: (list (make-author name: "Bread Face"
+                                 email: "breadfaceblog@gmail.com"))
      links: (list (make-link uri: "https://www.instagram.com/breadfaceblog/"))
      entries: (map
                (match-lambda
@@ -138,13 +136,12 @@
                   content: (make-content description))))
                posts)))))
 
-(define (main)
-  (let ((db (open-database database))
-        (file atom-file))
+(define (main db-file atom-file)
+  (let ((db (open-database db-file)))
     (init-database db)
     (insert-posts! db (posts (fetch-json)))
     (let ((posts (latest-posts db atom-limit)))
-      (with-output-to-file (format "~a/~a" (car (command-line-arguments)) file)
-        (lambda () (atom-feed db file posts))))))
+      (with-output-to-file atom-file
+        (lambda () (atom-feed db posts))))))
 
-(main)
+(apply main (command-line-arguments))
