@@ -20,7 +20,7 @@
 
 (form-urlencoded-separator "&&")
 
-(define user-agent "Mozilla/5.0 (compatible; +http://animu.brause.cc)")
+(define user-agent "Mozilla/5.0 (compatible; +https://animu.brause.cc)")
 (define base-url "https://anidb.net/perl-bin/animedb.pl")
 (define api-headers (headers '((X-LControl x-no-cache))))
 
@@ -152,7 +152,7 @@
   (rfc3339->string (time->rfc3339 (string->time string "%Y-%m-%dT%H:%M:%S"))))
 
 (define (permalink aid)
-  (str "http://anidb.net/anime/" (number->string aid)))
+  (str "https://anidb.net/anime/" (number->string aid)))
 
 (define (save-atom-feed! db path)
   (call-with-output-file path
@@ -161,10 +161,10 @@
        (make-atom-doc
         (make-feed
          title: (make-title "New anime episodes")
-         id: "http://animu.brause.cc/"
+         id: "https://animu.brause.cc/"
          updated: (datestring->datetime (updated-at db))
          authors: (list (make-author name: "anidb"))
-         links: (list (make-link uri: "http://anidb.net"))
+         links: (list (make-link uri: "https://anidb.net"))
          entries: (map
                    (match-lambda
                     ((aid atitle gid gtitle lastep lastup completed)

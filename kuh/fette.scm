@@ -45,10 +45,10 @@
    (make-atom-doc
     (make-feed
      title: (make-title "Fette Brause")
-     id: "http://fette.brause.cc/"
+     id: "https://fette.brause.cc/"
      updated: (unix->datetime (updated-at))
      authors: (list (make-author name: "Vasilij Schneidermann"))
-     links: (list (make-link uri: "http://facebook.com/DiefetteKuh"))
+     links: (list (make-link uri: "https://facebook.com/DiefetteKuh"))
      entries: (map (match-lambda
                     ((id date description url permalink)
                      (make-entry

@@ -42,7 +42,7 @@
      (home-page . "https://elpa.gnu.org/"))
     (marmalade
      (title . "Marmalade")
-     (archive-contents . "http://marmalade-repo.org/packages/archive-contents")
+     (archive-contents . "https://marmalade-repo.org/packages/archive-contents")
      (permalink . "https://marmalade-repo.org/packages/~a")
      (home-page . "https://marmalade-repo.org/")
      ;; expired certificate
@@ -172,7 +172,7 @@
    (make-atom-doc
     (make-feed
      title: (make-title (format "~a Packages" (archive-title archive)))
-     id: (format "http://elpa.brause.cc/~a" file)
+     id: (format "https://elpa.brause.cc/~a" file)
      updated: (unix->datetime (updated-at db))
      authors: (list (make-author name: (symbol->string archive)))
      links: (list (make-link uri: (archive-home-page archive)))

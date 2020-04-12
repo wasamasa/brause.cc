@@ -120,7 +120,7 @@
    (make-atom-doc
     (make-feed
      title: (make-title "breadfaceblog")
-     id: (format "http://brot.brause.cc/atom.xml")
+     id: (format "https://brot.brause.cc/atom.xml")
      updated: (unix->datetime (updated-at db))
      authors: (list (make-author name: "Bread Face"
                                  email: "breadfaceblog@gmail.com"))

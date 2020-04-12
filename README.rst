@@ -22,12 +22,6 @@ braune.brause.cc_
 
 `Random quotes`_ by `Axel Stoll`_.
 
-fette.brause.cc_
-----------------
-
-Dynamically generated atom feed for `a certain burger restaurant`_.
-Consists of `a binary scraping contents`_ and `a binary serving them`_.
-
 brot.brause.cc_
 ---------------
 
@@ -48,26 +42,22 @@ Status page for the CCCC_ hackerspace, based on `their official API`_.
 If you find this information useful, use the API instead of scraping
 my page or you'll get blocked.
 
-.. _CHICKEN Scheme: http://call-cc.org/
-.. _brause.cc: http://brause.cc/
+.. _CHICKEN Scheme: https://call-cc.org/
+.. _brause.cc: https://brause.cc/
 .. _Animated CSS3 pixel art: https://github.com/wasamasa/brause.cc/blob/master/index.html
-.. _Ersatz-Dropbox: http://brause.cc/dealwithit.jpg
+.. _Ersatz-Dropbox: https://x32.be/dealwithit.jpg
 .. _Dropbox: https://www.dropbox.com/
 .. _rsync script: https://github.com/wasamasa/dotfiles/blob/master/home/wasa/bin/fallkiste
 .. _Ruby script: https://github.com/wasamasa/dotfiles/blob/master/home/wasa/bin/permalink
-.. _braune.brause.cc: http://braune.brause.cc/
+.. _braune.brause.cc: https://braune.brause.cc/
 .. _Random quotes: https://github.com/wasamasa/brause.cc/blob/master/stoll/stoll.scm
 .. _Axel Stoll: https://en.wikipedia.org/wiki/Axel_Stoll
-.. _fette.brause.cc: http://fette.brause.cc/
-.. _a certain burger restaurant: http://fettekuh.de/
-.. _a binary scraping contents: https://github.com/wasamasa/brause.cc/blob/master/kuh/kuh.scm
-.. _a binary serving them: https://github.com/wasamasa/brause.cc/blob/master/kuh/fette.scm
-.. _brot.brause.cc: http://brot.brause.cc/
+.. _brot.brause.cc: https://brot.brause.cc/
 .. _breadfaceblog: https://www.instagram.com/breadfaceblog/
 .. _Instagram: https://www.instagram.com/
-.. _elpa.brause.cc: http://elpa.brause.cc/
+.. _elpa.brause.cc: https://elpa.brause.cc/
 .. _Statically generated atom feeds: https://github.com/wasamasa/brause.cc/blob/master/elpa/elpa.scm
 .. _ELPA packages: https://github.com/wasamasa/brause.cc/blob/master/elpa/elpa.scm
-.. _c4.brause.cc: http://c4.brause.cc/
+.. _c4.brause.cc: https://c4.brause.cc/
 .. _CCCC: https://koeln.ccc.de/
 .. _their official API: https://api.koeln.ccc.de/
